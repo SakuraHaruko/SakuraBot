@@ -5,11 +5,11 @@ import net.mamoe.mirai.message.data.MessageChain
 import top.mrxiaom.overflow.BotBuilder
 
 object BotProvider {
-    private var bot: Bot? = null
+    var bot: Bot? = null
 
-    suspend fun connect() {
-        val bot = BotBuilder.positive("ws://127.0.0.1:3001")
-            .token("awa")
+    suspend fun connect(address: String, accessToken: String) {
+        val bot = BotBuilder.positive(address)
+            .token(accessToken)
             .connect()
 
         if (bot != null) {
@@ -24,9 +24,4 @@ object BotProvider {
     suspend fun sendGroupMessage(groupID: Long, message: String) {
         bot?.getGroup(groupID)?.sendMessage(message)
     }
-
-    fun getBot(): Bot? {
-        return bot
-    }
-
 }

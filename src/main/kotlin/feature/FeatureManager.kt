@@ -10,7 +10,11 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
 class FeatureManager {
-    private var featureClasses: List<KClass<out Feature>> = Reflection().findSubTypes("moe.nekocafe.sakurabot.feature.features", Feature::class) as List<KClass<out Feature>>
+    private var featureClasses: List<KClass<out Feature>>? = null
+
+    fun load() {
+        featureClasses = Reflection().findSubTypes("moe.nekocafe.sakurabot.feature.features", Feature::class) as List<KClass<out Feature>>
+    }
 
     @Throws(Exception::class)
     fun handler(
@@ -24,7 +28,7 @@ class FeatureManager {
             "help", "菜单" -> {
                 val helpMsg = MessageChainBuilder().apply {
                     append(At(senderID)).append(" 当前可用的指令有\n(其中\"<>\"内的为必填参数，\"[]\"内的为可选参数)\n——————\n")
-                    for (singleClass in featureClasses) {
+                    for (singleClass in featureClasses!!) {
                         val pluginInfo = singleClass.createInstance().register() as? Map<String, Any>
                         if (pluginInfo != null) {
                             val pluginUsage = pluginInfo["usages"] as? Map<String, String>
@@ -47,7 +51,7 @@ class FeatureManager {
                 aboutMsg
             }
             else -> {
-                for (singleClass in featureClasses) {
+                for (singleClass in featureClasses!!) {
                     val pluginInfo = singleClass.createInstance().register() as? Map<String, Any>
                     if (pluginInfo != null) {
                         val pluginCommands = pluginInfo["commands"] as? Map<String, Method>

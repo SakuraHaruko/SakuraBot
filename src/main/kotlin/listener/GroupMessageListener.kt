@@ -1,7 +1,7 @@
 package moe.nekocafe.sakurabot.listener
 
+import moe.nekocafe.sakurabot.SakuraBot
 import moe.nekocafe.sakurabot.exception.FeatureNotFoundException
-import moe.nekocafe.sakurabot.feature.FeatureManager
 import net.mamoe.mirai.event.EventHandler
 import net.mamoe.mirai.event.SimpleListenerHost
 import net.mamoe.mirai.event.events.GroupMessageEvent
@@ -11,7 +11,8 @@ import kotlin.coroutines.CoroutineContext
 
 
 object GroupMessageListener : SimpleListenerHost() {
-    private val featureManager = FeatureManager()
+    private val featureManager = SakuraBot.featureManager
+    private val configManager = SakuraBot.configManager
 
     override fun handleException(context: CoroutineContext, exception: Throwable) {
 
@@ -20,7 +21,7 @@ object GroupMessageListener : SimpleListenerHost() {
     @EventHandler
     suspend fun GroupMessageEvent.onMessage() {
         val commandPattern =
-            ("^" + "!" + "[\\u4E00-\\u9FA5A-Za-z0-9_]+(\\s([\\u4E00-\\u9FA5A-Za-z0-9_\\[\\]\\s]|[^\\x00-\\xff])+)?$")
+            ("^" + configManager.sakuraBotConfig!!.commandPrefix + "[\\u4E00-\\u9FA5A-Za-z0-9_]+(\\s([\\u4E00-\\u9FA5A-Za-z0-9_\\[\\]\\s]|[^\\x00-\\xff])+)?$")
 
         val messageContent: MessageContent =
             message[MessageContent] ?: return
