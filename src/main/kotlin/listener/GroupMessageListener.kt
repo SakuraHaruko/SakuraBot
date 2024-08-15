@@ -20,6 +20,18 @@ object GroupMessageListener : SimpleListenerHost() {
 
     @EventHandler
     suspend fun GroupMessageEvent.onMessage() {
+        if (configManager.sakuraBotConfig?.enableWhitelist == true) {
+            if (configManager.sakuraBotConfig!!.groupWhitelist.contains(group.id)) {
+                return
+            }
+        }
+
+        if (configManager.sakuraBotConfig?.enableBlacklist == true) {
+            if (configManager.sakuraBotConfig!!.groupBlacklist.contains(group.id)) {
+                return
+            }
+        }
+
         val commandPattern =
             ("^" + configManager.sakuraBotConfig!!.commandPrefix + "[\\u4E00-\\u9FA5A-Za-z0-9_]+(\\s([\\u4E00-\\u9FA5A-Za-z0-9_\\[\\]\\s]|[^\\x00-\\xff])+)?$")
 

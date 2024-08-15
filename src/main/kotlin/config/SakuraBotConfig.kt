@@ -9,6 +9,6 @@ data class SakuraBotConfig(
     var commandPrefix: String = "!",
     var enableWhitelist: Boolean = false,
     var enableBlacklist: Boolean = false,
-    var groupWhitelist: List<String> = listOf("100111","111032"),
-    var groupBlacklist: List<String> = listOf("119111","111111")
+    var groupWhitelist: List<Long> = listOf(1111111,2222222),
+    var groupBlacklist: List<Long> = listOf(3333333,4444444)
 )
